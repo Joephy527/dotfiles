@@ -39,6 +39,34 @@ return {
     },
     config = function()
       -- See `:help cmp`
+      local kind_icons = {
+        Text = '',
+        Method = 'm',
+        Function = '',
+        Constructor = '',
+        Field = '',
+        Variable = '',
+        Class = '',
+        Interface = '',
+        Module = '',
+        Property = '',
+        Unit = '',
+        Value = '',
+        Enum = '',
+        Keyword = '',
+        Snippet = '',
+        Color = '',
+        File = '',
+        Reference = '',
+        Folder = '',
+        EnumMember = '',
+        Constant = '',
+        Struct = '',
+        Event = '',
+        Operator = '',
+        TypeParameter = '',
+        Copilot = '',
+      }
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
@@ -106,6 +134,7 @@ return {
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
+          -- Copilot Source
           {
             name = 'lazydev',
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
@@ -116,6 +145,27 @@ return {
           { name = 'path' },
           { name = 'buffer' },
           { name = 'friendly_snippets' },
+        },
+        formatting = {
+          fields = { 'kind', 'abbr', 'menu' },
+          format = function(entry, vim_item)
+            -- Kind icons
+            vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
+            -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+            vim_item.menu = ({
+              nvim_lsp = '[LSP]',
+              luasnip = '[Snippet]',
+              buffer = '[Buffer]',
+              path = '[Path]',
+              copilot = '[Copilot]',
+            })[entry.source.name]
+            return vim_item
+          end,
+          expandable_indicator = true, -- Add this line to fix the diagnostics issue
+        },
+        experimental = {
+          ghost_text = true,
+          native_menu = false,
         },
       }
     end,

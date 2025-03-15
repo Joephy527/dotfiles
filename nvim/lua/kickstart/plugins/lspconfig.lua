@@ -62,63 +62,120 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
-          -- NOTE: Remember that Lua is a real programming language, and as such it is possible
-          -- to define small helper and utility functions so you don't have to repeat yourself.
-          --
-          -- In this case, we create a function that lets us more easily define mappings specific
-          -- for LSP related items. It sets the mode, buffer and description for us each time.
-          local map = function(keys, func, desc, mode)
-            mode = mode or 'n'
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
-          end
-
-          -- Jump to the definition of the word under your cursor.
-          --  This is where a variable was first declared, or where a function is defined, etc.
-          --  To jump back, press <C-t>.
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-
-          -- Find references for the word under your cursor.
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-
-          -- Jump to the implementation of the word under your cursor.
-          --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-
-          -- Jump to the type of the word under your cursor.
-          --  Useful when you're not sure what type a variable is and you want to see
-          --  the definition of its *type*, not where it was *defined*.
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-
-          -- Fuzzy find all the symbols in your current document.
-          --  Symbols are things like variables, functions, types, etc.
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-
-          -- Fuzzy find all the symbols in your current workspace.
-          --  Similar to document symbols, except searches over your entire project.
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-          -- Rename the variable under your cursor.
-          --  Most Language Servers support renaming across files, etc.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-
-          -- Execute a code action, usually your cursor needs to be on top of an error
-          -- or a suggestion from your LSP for this to activate.
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
-
-          -- WARN: This is not Goto Definition, this is Goto Declaration.
-          --  For example, in C this would take you to the header.
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-          map('<leader>d', vim.diagnostic.open_float, 'Show line diagnostics')
-          map('[d', vim.diagnostic.goto_prev, 'Go to previous diagnostic')
-          map(']d', vim.diagnostic.goto_next, 'Go to next diagnostic')
-          map('<leader>rs', ':LspRestart<CR>', 'Restart LSP')
-
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
           --    See `:help CursorHold` for information about when this is executed
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
+
+          -- [G]oto [D]efinition(s)
+          vim.keymap.set('n', 'gd', function()
+            local params = vim.lsp.util.make_position_params()
+            vim.lsp.buf_request(0, 'textDocument/definition', params, function(_, result)
+              local items = result
+              if type(result) == 'table' and result.result then
+                items = result.result
+              end
+
+              if not items or vim.tbl_isempty(items) then
+                vim.notify('No definition found', vim.log.levels.ERROR)
+              elseif #items == 1 then
+                vim.lsp.buf.definition(params)
+              else
+                require('fzf-lua').lsp_definitions()
+              end
+            end)
+          end, { desc = '[G]oto [D]efinition(s)' })
+
+          -- [G]oto [R]eference(s)
+          vim.keymap.set('n', 'gr', function()
+            local params = vim.lsp.util.make_position_params()
+            params.context = { includeDeclaration = true }
+            vim.lsp.buf_request(0, 'textDocument/references', params, function(_, result)
+              local items = result
+              if type(result) == 'table' and result.result then
+                items = result.result
+              end
+
+              if not items or vim.tbl_isempty(items) then
+                vim.notify('No references found', vim.log.levels.ERROR)
+              else
+                require('fzf-lua').lsp_references()
+              end
+            end)
+          end, { desc = '[G]oto [R]eference(s)' })
+
+          -- [G]oto [I]mplementation(s)
+          vim.keymap.set('n', 'gi', function()
+            local params = vim.lsp.util.make_position_params()
+            vim.lsp.buf_request(0, 'textDocument/implementation', params, function(_, result)
+              local items = result
+              if type(result) == 'table' and result.result then
+                items = result.result
+              end
+
+              if not items or vim.tbl_isempty(items) then
+                vim.notify('No implementation found', vim.log.levels.ERROR)
+              elseif #items == 1 then
+                vim.lsp.buf.implementation(params)
+              else
+                require('fzf-lua').lsp_implementations()
+              end
+            end)
+          end, { desc = '[G]oto [I]mplementation(s)' })
+
+          -- [G]oto [D]eclaration
+          vim.keymap.set('n', 'gD', function()
+            -- Check if declaration is supported
+            local clients = vim.lsp.get_active_clients { bufnr = 0 }
+            local has_support = false
+            for _, client in ipairs(clients) do
+              if client.supports_method 'textDocument/declaration' then
+                has_support = true
+                break
+              end
+            end
+
+            if not has_support then
+              vim.notify('LSP method textDocument/declaration not supported', vim.log.levels.ERROR)
+              return
+            end
+
+            local params = vim.lsp.util.make_position_params()
+            vim.lsp.buf_request(0, 'textDocument/declaration', params, function(_, result)
+              local items = result
+              if type(result) == 'table' and result.result then
+                items = result.result
+              end
+
+              if not items or vim.tbl_isempty(items) then
+                vim.notify('No declaration found', vim.log.levels.ERROR)
+              elseif #items == 1 then
+                vim.lsp.buf.declaration(params)
+              else
+                require('fzf-lua').lsp_declarations()
+              end
+            end)
+          end, { desc = '[G]oto [D]eclaration' })
+
+          vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show line diagnostics' })
+          vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
+          vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+          vim.keymap.set('n', '<leader>rs', ':LspRestart<CR>', { desc = 'Restart LSP' })
+
+          -- Jump to the type of the word under your cursor.
+          --  Useful when you're not sure what type a variable is and you want to see
+          --  the definition of its *type*, not where it was *defined*.
+          vim.keymap.set('n', '<leader>D', require('fzf-lua').lsp_typedefs, { desc = 'Type [D]efinition' })
+
+          -- Rename the variable under your cursor.
+          --  Most Language Servers support renaming across files, etc.
+          vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, { desc = '[R]ename' })
+
+          -- Execute a code action, usually your cursor needs to be on top of an error
+          -- or a suggestion from your LSP for this to activate.
+          vim.keymap.set({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ction' })
+
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
@@ -148,17 +205,36 @@ return {
           --
           -- This may be unwanted, since they displace some of your code
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-            map('<leader>th', function()
+            vim.keymap.set('n', '<leader>uh', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
+            end, { desc = 'Toggle [U]i Inlay [H]ints' })
           end
         end,
       })
+      local floating_border_style = 'rounded'
+
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = floating_border_style,
+      })
+
+      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = floating_border_style,
+      })
+
+      vim.diagnostic.config {
+        float = { border = floating_border_style },
+      }
+
+      -- Change diagnostic symbols in the sign column (gutter)
+      local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
+      local diagnostic_signs = {}
+      for type, icon in pairs(signs) do
+        diagnostic_signs[vim.diagnostic.severity[type]] = icon
+      end
+      vim.diagnostic.config { signs = { text = diagnostic_signs } }
 
       -- Change diagnostic symbols in the sign column (gutter)
       if vim.g.have_nerd_font then
-        local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
-        local diagnostic_signs = {}
         for type, icon in pairs(signs) do
           diagnostic_signs[vim.diagnostic.severity[type]] = icon
         end

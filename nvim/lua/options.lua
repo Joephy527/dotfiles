@@ -14,6 +14,7 @@ opt.expandtab = true
 opt.autoindent = true
 
 opt.wrap = true
+opt.hlsearch = false
 
 -- Make line numbers default
 vim.opt.number = true
@@ -34,7 +35,6 @@ vim.opt.showmode = false
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
-
 -- Enable break indent
 vim.opt.breakindent = true
 
@@ -74,3 +74,10 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.opt.smarttab = true
+vim.opt.smartindent = true
+vim.opt.autoindent = true -- Keep identation from previous line
+
+-- Disable commandline until it is needed. This gives us a cleaner look and an extra line ;)
+vim.opt.cmdheight = 0

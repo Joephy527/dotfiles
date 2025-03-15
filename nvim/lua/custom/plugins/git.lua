@@ -96,41 +96,40 @@ return {
       end, { desc = 'Go to the previous hunk (or change in diff)', noremap = true }) -- Do not remap
 
       -- Actions
-      map('n', '<leader>ghs', gitsigns.stage_hunk, { desc = 'Stage the current hunk (line)', noremap = true })
-      map('n', '<leader>ghr', gitsigns.reset_hunk, { desc = 'Reset the current hunk (undo)', noremap = true })
+      map('n', '<leader>ssh', gitsigns.stage_hunk, { desc = 'Stage the current hunk (line)', noremap = true })
+      map('n', '<leader>srh', gitsigns.reset_hunk, { desc = 'Reset the current hunk (undo)', noremap = true })
 
-      map('v', '<leader>ghs', function() -- Stage the selected hunk in visual mode
+      map('v', '<leader>svs', function() -- Stage the selected hunk in visual mode
         gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
       end, { desc = 'Stage the selected hunk in visual mode', noremap = true }) -- Do not remap
 
-      map('v', '<leader>ghr', function() -- Reset the selected hunk in visual mode
+      map('v', '<leader>svr', function() -- Reset the selected hunk in visual mode
         gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
       end, { desc = 'Reset the selected hunk in visual mode', noremap = true }) -- Do not remap
 
-      map('n', '<leader>ghS', gitsigns.stage_buffer, { desc = 'Stage the entire buffer', noremap = true })
-      map('n', '<leader>ghR', gitsigns.reset_buffer, { desc = 'Reset the entire buffer', noremap = true })
-      map('n', '<leader>ghp', gitsigns.preview_hunk, { desc = 'Preview the current hunk', noremap = true })
-      map('n', '<leader>ghi', gitsigns.preview_hunk_inline, { desc = 'Inline preview of the current hunk', noremap = true })
+      map('n', '<leader>ssb', gitsigns.stage_buffer, { desc = 'Stage the entire buffer', noremap = true })
+      map('n', '<leader>srb', gitsigns.reset_buffer, { desc = 'Reset the entire buffer', noremap = true })
+      map('n', '<leader>sph', gitsigns.preview_hunk, { desc = 'Preview the current hunk', noremap = true })
 
-      map('n', '<leader>ghb', function() -- Blame the current line (full commit info)
+      map('n', '<leader>sb', function() -- Blame the current line (full commit info)
         gitsigns.blame_line { full = true }
       end, { desc = 'Blame the current line (full commit info)', noremap = true }) -- Do not remap
 
-      map('n', '<leader>ghd', gitsigns.diffthis, { desc = 'Show the diff for the current file', noremap = true })
-      map('n', '<leader>ghD', function() -- Show the diff for the current file vs. the last commit
+      map('n', '<leader>sd', gitsigns.diffthis, { desc = 'Show the diff for the current file', noremap = true })
+      map('n', '<leader>sD', function() -- Show the diff for the current file vs. the last commit
         gitsigns.diffthis '~'
       end, { desc = 'Show the diff for the current file vs. the last commit', noremap = true }) -- Do not remap
 
-      map('n', '<leader>ghQ', function() -- Add all changes to the quickfix list
+      map('n', '<leader>sa', function() -- Add all changes to the quickfix list
         gitsigns.setqflist 'all'
       end, { desc = 'Add all changes to the quickfix list', noremap = true }) -- Do not remap
 
-      map('n', '<leader>ghq', gitsigns.setqflist, { desc = 'Add current changes to the quickfix list', noremap = true })
+      map('n', '<leader>sA', gitsigns.setqflist, { desc = 'Add current changes to the quickfix list', noremap = true })
 
       -- Toggles
-      map('n', '<leader>gtb', gitsigns.toggle_current_line_blame, { desc = 'Toggle line blame visibility', noremap = true })
-      map('n', '<leader>gtd', gitsigns.preview_hunk_inline, { desc = 'Toggle inline diff preview', noremap = true })
-      map('n', '<leader>gtw', gitsigns.toggle_word_diff, { desc = 'Toggle word diff', noremap = true })
+      map('n', '<leader>stb', gitsigns.toggle_current_line_blame, { desc = 'Toggle line blame visibility', noremap = true })
+      map('n', '<leader>std', gitsigns.preview_hunk_inline, { desc = 'Toggle inline diff preview', noremap = true })
+      map('n', '<leader>stw', gitsigns.toggle_word_diff, { desc = 'Toggle word diff', noremap = true })
 
       -- Text Object
       map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = 'Select the current hunk as a text object', noremap = true })
@@ -141,45 +140,45 @@ return {
     cmd = { 'Git', 'G', 'Gdiffsplit', 'Gvdiffsplit', 'Gedit', 'Gstatus', 'Gwrite', 'Gread', 'Gremove', 'Gmove' },
     keys = {
       -- Git status
-      { '<leader>ffs', ':Git<CR>', desc = 'Git status' },
+      { '<leader>gs', ':Git<CR>', desc = 'Git status' },
 
       -- Committing, pushing, and pulling
-      { '<leader>fc', ':Git commit<CR>', desc = 'Git commit' },
-      { '<leader>fP', ':Git push<CR>', desc = 'Git push' },
-      { '<leader>fp', ':Git pull<CR>', desc = 'Git pull' },
-      { '<leader>ffp', ':Git push --force<CR>', desc = 'Git push with force' },
+      { '<leader>gC', ':Git commit<CR>', desc = 'Git commit' },
+      { '<leader>gfp', ':Git push<CR>', desc = 'Git push' },
+      { '<leader>gp', ':Git pull<CR>', desc = 'Git pull' },
+      { '<leader>gP', ':Git push --force<CR>', desc = 'Git push with force' },
 
       -- Diff and comparison
-      { '<leader>fD', ':Gdiffsplit<CR>', desc = 'Git diff split' },
-      { '<leader>fs', ':Gvdiffsplit<CR>', desc = 'Git vertical diff split' },
-      { '<leader>fdp', ':Git diff @{upstream}<CR>', desc = 'Git diff against upstream' },
-      { '<leader>fdl', ':Git diff HEAD~1<CR>', desc = 'Git diff last commit' },
+      { '<leader>gD', ':Gdiffsplit<CR>', desc = 'Git diff split' },
+      { '<leader>gv', ':Gvdiffsplit<CR>', desc = 'Git vertical diff split' },
+      { '<leader>gdp', ':Git diff @{upstream}<CR>', desc = 'Git diff against upstream' },
+      { '<leader>gdl', ':Git diff HEAD~1<CR>', desc = 'Git diff last commit' },
 
       -- Blame and logs
-      { '<leader>fb', ':Git blame<CR>', desc = 'Git blame' },
-      { '<leader>fl', ':Git log<CR>', desc = 'Git log' },
+      { '<leader>gb', ':Git blame<CR>', desc = 'Git blame' },
+      { '<leader>gl', ':Git log<CR>', desc = 'Git log' },
 
       -- Branch and reset
-      { '<leader>fgc', ':Git checkout ', desc = 'Git checkout branch' },
-      { '<leader>frs', ':Git reset --soft HEAD~1<CR>', desc = 'Git reset soft' },
-      { '<leader>frh', ':Git reset --hard HEAD~1<CR>', desc = 'Git reset hard' },
+      { '<leader>gc', ':Git checkout ', desc = 'Git checkout branch' },
+      { '<leader>grs', ':Git reset --soft HEAD~1<CR>', desc = 'Git reset soft' },
+      { '<leader>grh', ':Git reset --hard HEAD~1<CR>', desc = 'Git reset hard' },
 
       -- Stash
-      { '<leader>fss', ':Git stash<CR>', desc = 'Git stash' },
-      { '<leader>fsp', ':Git stash pop<CR>', desc = 'Git stash pop' },
+      { '<leader>ggs', ':Git stash<CR>', desc = 'Git stash' },
+      { '<leader>ggS', ':Git stash pop<CR>', desc = 'Git stash pop' },
 
       -- File operations
-      { '<leader>fgC', ':Gread<CR>', desc = 'Git checkout file' },
-      { '<leader>fgD', ':Gremove<CR>', desc = 'Git remove file' },
-      { '<leader>fgM', ':Gmove ', desc = 'Git move/rename file' },
+      { '<leader>gfc', ':Gread<CR>', desc = 'Git checkout file' },
+      { '<leader>gfd', ':Gremove<CR>', desc = 'Git remove file' },
+      { '<leader>gfm', ':Gmove ', desc = 'Git move/rename file' },
 
       -- Git diffget/diffput from left and right
-      { '<leader>fdg', ':diffget //2<CR>', desc = 'Git diffget (take from left)' },
-      { '<leader>fdr', ':diffget //3<CR>', desc = 'Git diffget (take from right)' },
+      { '<leader>ggl', ':diffget //2<CR>', desc = 'Git diffget (take from left)' },
+      { '<leader>ggr', ':diffget //3<CR>', desc = 'Git diffget (take from right)' },
 
       -- Git add (stage changes from diff)
-      { '<leader>fA', ':Gwrite<CR>', desc = 'Git stage current file' },
-      { '<leader>fa', ':Git add .<CR>', desc = 'Git stage all changes' },
+      { '<leader>gA', ':Gwrite<CR>', desc = 'Git stage current file' },
+      { '<leader>ga', ':Git add .<CR>', desc = 'Git stage all changes' },
     },
   },
   {
