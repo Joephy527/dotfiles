@@ -1,0 +1,78 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 5
+padding.y = 5
+
+decorations = "Buttonless"
+
+opacity = 0.8
+# blur = true
+
+option_as_alt = "Both"
+
+[font]
+size = 8
+
+[font.bold]
+family = "MesloLGS Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "MesloLGS Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "MesloLGS Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "MesloLGS Nerd Font Mono"
+style = "Regular"
+
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/night_owl.toml"
+]
+
+[[keyboard.bindings]]
+key = "I"
+mods = "Control"
+chars = "\u001b[105;5u"
+
+
+[[keyboard.bindings]]
+key = "Left"
+mods = "Control"
+chars = "\u001b[1;5D"
+
+[[keyboard.bindings]]
+key = "B"
+mods = "Control"
+chars = "\u001b[1;5D"
+
+[[keyboard.bindings]]
+key = "Right"
+mods = "Control"
+chars = "\u001b[1;5C"
+
+[[keyboard.bindings]]
+key = "E"
+mods = "Control"
+chars = "\u001b[1;5C"
+
+[[keyboard.bindings]]
+key = "Backspace"
+mods = "Control"
+chars = "\u0017"
+
+[[keyboard.bindings]]
+key = "L"
+mods = "Control"
+chars = "\u0006"
+
+[[keyboard.bindings]]
+key = "H"
+mods = "Control"
+chars = "\u0002"
