@@ -1,6 +1,7 @@
 return {
   {
     'zbirenbaum/copilot.lua',
+    enabled = false,
     cmd = 'Copilot',
     build = ':Copilot auth',
     event = 'BufReadPost',
@@ -10,7 +11,7 @@ return {
         auto_trigger = true,
         hide_during_completion = false,
         keymap = {
-          accept = '<C-l>',
+          accept = '<Tab>',
           next = '<M-]>',
           prev = '<M-[>',
         },
@@ -31,10 +32,14 @@ return {
     config = function(_, opts)
       -- Setup for copilot.lua integration
       require('copilot').setup(opts)
+      vim.defer_fn(function()
+        require('copilot.suggestion').toggle_auto_trigger()
+      end, 100)
     end,
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
+    enable = false,
     branch = 'main',
     cmd = 'CopilotChat',
     opts = function()

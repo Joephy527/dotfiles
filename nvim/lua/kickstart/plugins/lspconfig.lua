@@ -200,6 +200,8 @@ return {
             })
           end
 
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = event.buf, desc = 'LSP Hover Documentation' })
+
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
           --
@@ -221,17 +223,20 @@ return {
         border = floating_border_style,
       })
 
-      vim.diagnostic.config {
-        float = { border = floating_border_style },
-      }
-
       -- Change diagnostic symbols in the sign column (gutter)
       local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
       local diagnostic_signs = {}
       for type, icon in pairs(signs) do
         diagnostic_signs[vim.diagnostic.severity[type]] = icon
       end
-      vim.diagnostic.config { signs = { text = diagnostic_signs } }
+      vim.diagnostic.config {
+        virtual_text = true, -- enable inline diagnostic text
+        float = { border = floating_border_style },
+        signs = { text = diagnostic_signs },
+        underline = true, -- optional but recommended
+        update_in_insert = false,
+        severity_sort = true,
+      }
 
       -- Change diagnostic symbols in the sign column (gutter)
       if vim.g.have_nerd_font then
@@ -259,9 +264,6 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        emmet_ls = {
-          filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less', 'svelte' },
-        },
         gopls = {},
         -- pyright = {},
         rust_analyzer = {},
@@ -273,7 +275,7 @@ return {
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
         --
-
+        pyright = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -328,7 +330,7 @@ return {
         'html',
         'jsonls',
         'rust_analyzer',
-        'pylsp',
+        'pyright',
         'svelte',
         'tailwindcss',
         'volar',
