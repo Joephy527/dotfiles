@@ -64,9 +64,11 @@ alias gp="git pull"
 alias gr="git rebase"
 alias nr="npm run"
 alias g="git status"
+alias t="tmux"
+alias ta="tmux a"
 
 # language and frameworks
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
 export XDG_CURRENT_DESKTOP=Hyprland
 export PATH=$PATH:$(go env GOPATH)/bin
 export GODEBUG=netdns=go
@@ -81,3 +83,7 @@ export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
 export CHROME_EXECUTABLE=/opt/google/chrome/google-chrome
+
+export QT_QPA_PLATFORMTHEME=qt5ct
+
+export PATH="$HOME/.local/bin:$PATH"
