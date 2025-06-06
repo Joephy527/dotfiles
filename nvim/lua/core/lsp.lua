@@ -6,6 +6,7 @@ vim.lsp.enable({
   "rust-analyzer",
   "intelephense",
   "pylsp",
+  "tailwindcss-language-server",
 })
 
 vim.diagnostic.config({
