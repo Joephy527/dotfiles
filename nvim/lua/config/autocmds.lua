@@ -129,7 +129,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         if not items or vim.tbl_isempty(items) then
           vim.notify("No definition found", vim.log.levels.ERROR)
         elseif #items == 1 then
-          vim.lsp.buf.definition(params)
+          vim.lsp.util.jump_to_location(items[1], 'utf-8')
         else
           require("fzf-lua").lsp_definitions()
         end

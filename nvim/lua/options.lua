@@ -2,10 +2,10 @@
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-
+print("options.lua loaded")
 local opt = vim.opt
 
-opt.guicursor = ''
+opt.guicursor = ""
 
 -- tabs and indentation
 opt.tabstop = 2
@@ -23,17 +23,23 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
-
+vim.g.clipboard = {
+  name = "win32yank-wsl",
+  copy = { ["+"] = "win32yank.exe -i --crlf", ["*"] = "win32yank.exe -i --crlf" },
+  paste = { ["+"] = "win32yank.exe -o --lf", ["*"] = "win32yank.exe -o --lf" },
+  cache_enabled = 0,
+}
+vim.opt.clipboard = "unnamedplus"
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  vim.opt.clipboard = "unnamedplus"
 end)
 -- Enable break indent
 vim.opt.breakindent = true
@@ -46,7 +52,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Keep signcolumn on by default
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
 -- Decrease update time
 vim.opt.updatetime = 250
@@ -62,10 +68,10 @@ vim.opt.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
