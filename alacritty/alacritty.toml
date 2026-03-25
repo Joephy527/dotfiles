@@ -13,7 +13,7 @@ opacity = 0.8
 option_as_alt = "Both"
 
 [font]
-size = 8
+size = 9
 
 [font.bold]
 family = "MesloLGS Nerd Font Mono"
@@ -29,7 +29,7 @@ style = "Italic"
 
 [font.normal]
 family = "MesloLGS Nerd Font Mono"
-style = "Regular"
+style = "Bold"
 
 [general]
 import = [
@@ -48,17 +48,7 @@ mods = "Control"
 chars = "\u001b[1;5D"
 
 [[keyboard.bindings]]
-key = "B"
-mods = "Control"
-chars = "\u001b[1;5D"
-
-[[keyboard.bindings]]
 key = "Right"
-mods = "Control"
-chars = "\u001b[1;5C"
-
-[[keyboard.bindings]]
-key = "E"
 mods = "Control"
 chars = "\u001b[1;5C"
 
@@ -68,11 +58,6 @@ mods = "Control"
 chars = "\u0017"
 
 [[keyboard.bindings]]
-key = "L"
-mods = "Control"
-chars = "\u0006"
-
-[[keyboard.bindings]]
-key = "H"
-mods = "Control"
-chars = "\u0002"
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

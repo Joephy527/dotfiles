@@ -1,26 +1,22 @@
 local blink = require("blink.cmp")
 
 return {
-  cmd = { "pylsp" },
+  cmd = { "basedpyright-langserver", "--stdio" },
   filetypes = { "python" },
   root_markers = {
     "pyproject.toml",
     "setup.py",
     "setup.cfg",
     "requirements.txt",
+    "pyrightconfig.json",
     ".git",
   },
   settings = {
-    pylsp = {
-      plugins = {
-        pyflakes = { enabled = true },
-        pycodestyle = { enabled = true },
-        mccabe = { enabled = true },
-        rope_completion = { enabled = true },
-        jedi_completion = {
-          fuzzy = true,
-          include_params = true,
-        },
+    basedpyright = {
+      analysis = {
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "workspace",
       },
     },
   },

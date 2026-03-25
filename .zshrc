@@ -41,8 +41,10 @@ bindkey -e
 bindkey '^k' history-search-backward
 bindkey '^j' history-search-forward
 
-bindkey "\e[1;5D" backward-word
-bindkey "\e[1;5C" forward-word
+bindkey "^b" backward-word
+bindkey "^e" forward-word
+bindkey "^h" backward-char
+bindkey "^l" forward-char
 
 # ---- Eza (better ls) -----
 alias ls="eza --icons=always"
@@ -60,12 +62,21 @@ alias gc="git checkout"
 alias ga="git add"
 alias gaa="git add ."
 alias gpf="git push -f"
+alias gpp="git push"
+alias gps='git push --set-upstream origin $(git branch --show-current)'
 alias gp="git pull"
 alias gr="git rebase"
 alias nr="npm run"
 alias g="git status"
 alias t="tmux"
 alias ta="tmux a"
+alias f="firebase"
+alias fl="firebase login"
+alias flr="firebase login --no-localhost --reauth --debug"
+alias fud="firebase use dev"
+
+# nvm
+source /usr/share/nvm/init-nvm.sh
 
 # language and frameworks
 # . "$HOME/.cargo/env"

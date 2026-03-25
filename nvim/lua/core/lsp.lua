@@ -5,7 +5,7 @@ vim.lsp.enable({
   "ts-ls",
   "rust-analyzer",
   "intelephense",
-  "pylsp",
+  "basedpyright",
   "tailwindcss-language-server",
 })
 
